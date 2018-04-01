@@ -240,7 +240,7 @@ var AppSettings = (function () {
 // LocalHost Cassis:
 // public static API_ENDPOINT = 'http://localhost:61420/api/';
 // Azure:
-AppSettings.API_ENDPOINT = 'http://fbtc-api.azurewebsites.net/api/';
+AppSettings.API_ENDPOINT = 'https://fbtc-api.azurewebsites.net/api/';
 // Endereço do Serviço de CEP:
 AppSettings.API_ENDPOINT_CEP = 'http://api.postmon.com.br/v1/cep';
 //# sourceMappingURL=app.settings.js.map
