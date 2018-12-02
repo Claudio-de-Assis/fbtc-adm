@@ -1,0 +1,154 @@
+<h1 class="page-header">{{ title }}</h1>
+<div class="row">
+        <div class="col-lg-12">
+            <form (ngSubmit)="onSubmit()" #associadoForm="ngForm">
+            <div class="panel panel-default">
+                <div class="panel-heading">Filtro</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inpNome">Nome:</label>
+                                <input id="inpNome" name="nome" class="form-control" type="text"
+                                    minlength="2"  maxlength="100"
+                                    [(ngModel)]="editNome"  #nome="ngModel"/>
+                                    <div *ngIf="nome.invalid && (nome.dirty || nome.touched)"
+                                        class="alert alert-danger">
+                                        <div *ngIf="nome.errors.minlength"> * O Nome deve ter pelo menos 2 letras.</div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="sltSexo">Sexo:</label><br>
+                                <select id="sltSexo" name="sexo" class="form-control"
+                                    [(ngModel)]="editSexo" #sexo="ngModel">
+                                    <option *ngFor="let op of _util.optSexo" value="{{ op.value }}">{{ op.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="sltTipoProfissao">Profissão</label>
+                                <select id="sltTipoProfissao" name="tipoProfissao" class="form-control"
+                                    [(ngModel)]="editTipoProfissao" #tipoProfissao="ngModel">
+                                    <option *ngFor="let op of _util.optTipoProfissao" value="{{ op.value }}">{{ op.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="inpCrp">CRP:</label>
+                                <input id="inpCrp" name="Crp" class="form-control" type="number"
+                                    maxlength="15"
+                                    [(ngModel)]="editCrp" #crp="ngModel"/>
+                            </div>
+                        </div>
+                    </div>                            
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="sltTipoPublico">Público:</label>
+                                <select id="sltTipoPublico" name="tipoPublico" class="form-control" 
+                                    [(ngModel)]="editTipoPublicoId" name="TipoPublico" #tipoPublico="ngModel">
+                                    <option *ngFor="let op of tiposPublicos" value="{{ op.tipoPublicoId }}">{{ op.nome }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="sltATC">ATC:</label>
+                                <select id="sltATC" name="atc" class="form-control" 
+                                    [(ngModel)]="editAtcId" #atc="ngModel">
+                                    <option *ngFor="let op of atcs" value="{{ op.atcId }}">{{ op.nome }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-1">
+                            <div class="form-group">
+                                <label for="sltEstado">Estado:</label>
+                                <select id="sltEstado" name="estado" class="form-control" 
+                                    [(ngModel)]="editEstado" #estado="ngModel" (ngModelChange)="gotoGetCidades()">
+                                    <option *ngFor="let op of estados" value="{{ op.estado }}">{{ op.estado }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="sltCidade">Cidade:</label>
+                                <select id="sltCidade" name="cidade" class="form-control" 
+                                    [(ngModel)]="editCidade" #cidade="ngModel" >
+                                    <option *ngFor="let op of cidades" value="{{ op.cidade }}">{{ op.cidade }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Status:</label><br>
+                                <div>
+                                    <label required class="radion-inline" *ngFor="let op of _util.optBooleanFull; let idx = index">
+                                        <input type="radio" [(ngModel)]="editAtivo" name="rdaAtivo" [value]="op.value" [checked]="idx === 1"> {{ op.name }} &nbsp;
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>        
+                </div>
+                <div class="panel-footer text-right">
+                    <div class="row ">
+                        <div class="col-lg-12">    
+                                <button class="btn btn-default" (click)="gotoLimparFiltros()">Limpar Filtros</button>
+                                <button type="submit" class="btn btn-primary">Pesquisar</button>
+                                <button type="reset" class="btn btn-default" (click)="gotoNovoAssociado()">Novo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Resultado da Consulta{{ _msgProgresso }}
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>E-Mail</th>
+                                <th>Telefone</th>
+                                <th>CPF</th>
+                                <th>Tipo Associado</th>
+                                <!--<th>Ações</th>-->
+                            </tr>
+                        </thead>
+                        <tbody class="associados">
+                            <tr (click)="onSelect(associado)" *ngFor="let associado of associados | paginate: { itemsPerPage: _itensPerPage, currentPage: p } "
+                                [class.selected]="associado.associadoId === selectedId">
+                                <td>{{ associado.nome }}</td>
+                                <td>{{associado.eMail}}</td>
+                                <td>{{associado.nrCelular}}</td>
+                                <td>{{associado.cpf}}</td>
+                                <td>{{associado.tipoPublicoId | findNameInTipoPublico : tiposPublicos}}</td>
+                                <!--<td>
+                                    <a [routerLink]="['/admin/Associado', associado.pessoaId]"><i class="fa fa-pencil text-default"></i></a>&nbsp;-->
+                                    <!--<i class="fa fa-trash text-danger"></i>-->
+                                <!--</td>-->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-footer text-center">
+                <div class="btn-group">
+                        <pagination-controls    (pageChange)="p = $event"
+                                                maxSize="9"
+                                                directionLinks="true"
+                                                previousLabel="Anterior"
+                                                nextLabel="Próxima"
+                        ></pagination-controls>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>

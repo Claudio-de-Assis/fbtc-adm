@@ -1,0 +1,94 @@
+<h1 class="page-header">{{ title }} <span class="badge badge-default">{{ badge }}</span></h1>
+<div class="row">
+    <div class="col-lg-12">
+        <form (ngSubmit)="onSubmit()" #fichaFinanceiraForm="ngForm">
+        <div class="panel panel-default">
+            <div class="panel-heading">Dados</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="inpExercicio">Exercício:</label>
+                            <input id="inpExercicio" name="exercicio" class="form-control" type="number"
+                                maxlength="4"
+                                [(ngModel)]="editExercicio"  #exercicio="ngModel"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Status:</label><br>
+                                <div>
+                                    <label required class="radion-inline" *ngFor="let op of _util.optBooleanFull; let idx = index">
+                                        <input type="radio" [(ngModel)]="editAtivo" name="rdaAtivo" [value]="op.value" [checked]="idx === 1"> {{ op.name }} &nbsp;
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div *ngIf="_msg !== ''" class="alert alert-success">
+                            <div >{{ _msg }}</div>
+                        </div>
+                        <div *ngIf="mensagemSincronizacao !== ''" class="alert alert-info">
+                            <div >{{ mensagemSincronizacao }}</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-lg-12 text-right">
+                       <!-- <button class="btn btn-success" (click)="gotoSicronizarComPagSeguro()" alt="Sincroniza o sistema 30 dias">Sincronizar com PagSeguro</button> -->
+                       <button class="btn btn-default" (click)="gotoLimparFiltros()">Limpar Filtros</button>
+                       <button type="submit" class="btn btn-primary">Pesquisar</button>
+                       <button type="reset" class="btn btn-default" (click)="gotoNovaAnuidade()">Nova</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+        <!-- PAINEL RESULTADO DA BUSCA -->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Listagem de anuidades{{ _msgProgresso }}
+            </div>
+            <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <td>Exercício</td>
+                                    <td>Ativo</td>
+                                    <!--<td>Ações</td>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr (click)="onSelect(anuidade)" *ngFor="let anuidade of anuidades | paginate: { itemsPerPage: _itensPerPage, currentPage: p }"
+                                    [class.selected]="anuidade.anuidadeId === selectedId">
+                                    <td>{{ anuidade.exercicio }}</td>
+                                    <td>{{ anuidade.ativo | booMessage }}</td>
+                                    <!--<td>
+                                        <a [routerLink]="['/admin/FichaFinanceira', anuidade.anuidadeId]"><i class="fa fa-pencil text-primary"></i></a>
+                                    </td>-->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+            <div class="panel-footer text-center">
+                <div class="btn-group">
+                        <pagination-controls    (pageChange)="p = $event"
+                                                maxSize="9"
+                                                directionLinks="true"
+                                                previousLabel="Anterior"
+                                                nextLabel="Próxima"
+                        ></pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="row" *ngIf="messageService.messages.length" >
+    <div class="col-lg-12"> 
+        <div class="alert alert-info alert-dismissable">
+            <button type="button" class="close" data-dismmiss="alert" aria-hidden="true" (click)="messageService.clear()">
+                &times;
+            </button>
+            <h4>Depuração !</h4>
+            <div *ngFor='let message of messageService.messages'> {{message}} </div>
+        </div>
+    </div>
+</div>
