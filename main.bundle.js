@@ -275,7 +275,7 @@ AppSettings.ITENS_PER_PAGE = 30;
 // Azure:
 AppSettings.API_ENDPOINT = 'https://fbtc-api.azurewebsites.net/api/';
 // Endereço do Serviço de CEP:
-AppSettings.API_ENDPOINT_CEP = 'http://api.postmon.com.br/v1/cep';
+AppSettings.API_ENDPOINT_CEP = 'https://api.postmon.com.br/v1/cep';
 // Target do PagSeguro: false = 'SANDBOX' ou true = 'PRD'
 AppSettings.API_ENDPOINT_PS_TARGET_PRD = false;
 // ENDPOINT SANDBOX PS:
