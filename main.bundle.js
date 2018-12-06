@@ -3809,12 +3809,20 @@ var AssociadoFormComponent = (function () {
         if (this.editPessoaId !== 0) {
             this.service.ressetPassWordById(this.editPessoaId)
                 .subscribe(function (msg) {
-                _this.alertClassType = 'alert alert-success';
                 _this._msg = msg;
+                _this.gotoAvaliaRetornoEMail(_this._msg);
             });
         }
         else {
             alert('Atenção: Você precisa primeiro incluir o registro');
+        }
+    };
+    AssociadoFormComponent.prototype.gotoAvaliaRetornoEMail = function (msg) {
+        if (msg.substring(0, 7) === 'ATENÇÃO') {
+            this.alertClassType = 'alert alert-danger';
+        }
+        else {
+            this.alertClassType = 'alert alert-success';
         }
     };
     AssociadoFormComponent.prototype.gotoShowPopUp = function (msg) {
@@ -4893,7 +4901,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/colaborador/colaborador-form/colaborador.form.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1 class=\"page-header\">{{ title }} <span class=\"badge badge-default\">{{ badge }}</span></h1>\r\n<div class=\"row\">\r\n    <div class=\"col-lg-12\">\r\n    <form (ngSubmit)=\"onSubmit()\" #colaboradorForm=\"ngForm\">\r\n            <div class=\"panel panel-default\">\r\n            <div class=\"panel-heading\">Dados</div>\r\n            <div class=\"panel-body\">\r\n                    <div class=\"row\">\r\n                        <div class=\"col-lg-6\">\r\n                            <div class=\"form-group\">\r\n                                <label for=\"inpNome\">Nome:</label>\r\n                                <input id=\"inpNome\" name=\"nome\" class=\"form-control\" type=\"text\" \r\n                                    required minlength=\"4\" maxlength=\"100\" \r\n                                    [(ngModel)]=\"colaborador.nome\" #nome=\"ngModel\"/>\r\n\r\n                                <div *ngIf=\"nome.invalid && (nome.dirty || nome.touched)\"\r\n                                    class=\"alert alert-danger\">\r\n                                    <div *ngIf=\"nome.errors.required\">* O Nome é obrigatório.</div>\r\n                                    <div *ngIf=\"nome.errors.minlength\"> * O Nome deve ter pelo menos 4 letras.</div>\r\n                                </div>    \r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label for=\"inpEMail\">E-Mail:</label>\r\n                                <input id=\"inpEMail\" name=\"eMail\" class=\"form-control\" type=\"email\"\r\n                                    required minlength=\"4\" maxlength=\"100\"\r\n                                    [(ngModel)]=\"colaborador.eMail\"  #eMail=\"ngModel\"  (blur)=\"gotoValidarEMail()\"/>\r\n\r\n                                <div *ngIf=\"eMail.invalid && (eMail.dirty || eMail.touched)\"\r\n                                    class=\"alert alert-danger\">\r\n                                    <div *ngIf=\"eMail.errors.required\">* O E-Mail é obrigatório.</div>\r\n                                    <div *ngIf=\"nome.errors.minlength\">* O E-Mail deve ter pelo menos 4 letras.</div>\r\n                                </div>    \r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label for=\"chkAtivo\">Ativo:</label>\r\n                                <div>\r\n                                    <label required class=\"radion-inline\" *ngFor=\"let op of _util.optBoolean, let idx = index\" >\r\n                                        <input id=\"chkAtivo\" type=\"radio\" [(ngModel)]=\"colaborador.ativo\" name=\"rdaAtivo\" id=\"rdAtivo\" [checked]=\"op.value === colaborador.ativo\" [value]=\"op.value\" #ativo=\"ngModel\"> {{ op.name }} &nbsp;\r\n                                    </label>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                        <div class=\"col-lg-6\">\r\n                            <div class=\"form-group\">\r\n                                <label for=\"sltTipoPerfil\">Perfil:</label>\r\n                                <select id=\"sltTipoPerfil\" name=\"tipoPerfil\" class=\"form-control\"\r\n                                    required [(ngModel)]=\"colaborador.perfilId\" #tipoPerfil=\"ngModel\">\r\n                                    <option *ngFor=\"let op of _util.optTipoPerfil\" value=\"{{ op.value }}\">{{ op.name }}</option>\r\n                                </select>\r\n                                <div *ngIf=\"tipoPerfil.tipoPerfil && (tipoPerfil.dirty || tipoPerfil.touched)\"\r\n                                    class=\"alert alert-danger\">    \r\n                                    <div *ngIf=\"tipoPerfil.errors.required\">* O Perfil é obrigatório.</div>\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label for=\"inpNrCelular\">Celular:</label>\r\n                           \r\n                                <input id=\"inpNrCelular\" name=\"nrCelular\" class=\"form-control\" type=\"text\"\r\n                                    required  minlength=\"10\" maxlength=\"11\"\r\n                                    [(ngModel)]=\"colaborador.nrCelular\"  #nrCelular=\"ngModel\"/>\r\n\r\n                                <div *ngIf=\"nrCelular.invalid && (nrCelular.dirty || nrCelular.touched)\"\r\n                                    class=\"alert alert-danger\">\r\n                                    <div *ngIf=\"nrCelular.errors.required\">* O Nº do celular é obrigatório.</div>\r\n                                    <div *ngIf=\"nrCelular.errors.minlength\">* O Nº do celular deve ter pelo menos 10 algarismos.</div>\r\n                                </div>    \r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"row\">\r\n                        <div class=\"col-lg-6\">\r\n                            <div *ngIf=\"_msg !== ''\" class=\"alert alert-success\">\r\n                                <div >{{ _msg }}</div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            <div class=\"panel-footer\">\r\n                <div class=\"row\">\r\n                    <div class=\"col-lg-6\">\r\n                        <button type=\"button\" class=\"btn btn-success\" [disabled]=\"!colaboradorForm.form.valid\" (click)=\"gotoReenviarSenha()\">Reenviar Senha</button>\r\n                    </div>\r\n                    <div class=\"col-lg-6 text-right\">\r\n                        <button type=\"submit\" class=\"btn btn-primary\" [disabled]=\"!colaboradorForm.form.valid\">Salvar</button>\r\n                        <button class=\"btn btn-default\" (click)=\"gotoColaboradores()\">Retornar</button>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <!--<app-alert-selfclosing></app-alert-selfclosing>-->\r\n        </div>\r\n    </form>\r\n</div>\r\n</div>\r\n\r\n"
+module.exports = "<h1 class=\"page-header\">{{ title }} <span class=\"badge badge-default\">{{ badge }}</span></h1>\r\n<div class=\"row\">\r\n    <div class=\"col-lg-12\">\r\n    <form (ngSubmit)=\"onSubmit()\" #colaboradorForm=\"ngForm\">\r\n            <div class=\"panel panel-default\">\r\n            <div class=\"panel-heading\">\r\n                Dados{{ _msgProgresso }}\r\n            </div>\r\n            <div class=\"panel-body\">\r\n                    <div class=\"row\">\r\n                        <div class=\"col-lg-6\">\r\n                            <div class=\"form-group\">\r\n                                <label for=\"inpNome\">Nome:</label>\r\n                                <input id=\"inpNome\" name=\"nome\" class=\"form-control\" type=\"text\" \r\n                                    required minlength=\"4\" maxlength=\"100\" \r\n                                    [(ngModel)]=\"colaborador.nome\" #nome=\"ngModel\"/>\r\n\r\n                                <div *ngIf=\"nome.invalid && (nome.dirty || nome.touched)\"\r\n                                    class=\"alert alert-danger\">\r\n                                    <div *ngIf=\"nome.errors.required\">* O Nome é obrigatório.</div>\r\n                                    <div *ngIf=\"nome.errors.minlength\"> * O Nome deve ter pelo menos 4 letras.</div>\r\n                                </div>    \r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label for=\"inpEMail\">E-Mail:</label>\r\n                                <input id=\"inpEMail\" name=\"eMail\" class=\"form-control\" type=\"email\"\r\n                                    required minlength=\"4\" maxlength=\"100\"\r\n                                    [(ngModel)]=\"colaborador.eMail\"  #eMail=\"ngModel\"  (blur)=\"gotoValidarEMail()\"/>\r\n\r\n                                <div *ngIf=\"eMail.invalid && (eMail.dirty || eMail.touched)\"\r\n                                    class=\"alert alert-danger\">\r\n                                    <div *ngIf=\"eMail.errors.required\">* O E-Mail é obrigatório.</div>\r\n                                    <div *ngIf=\"nome.errors.minlength\">* O E-Mail deve ter pelo menos 4 letras.</div>\r\n                                </div>    \r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label for=\"chkAtivo\">Ativo:</label>\r\n                                <div>\r\n                                    <label required class=\"radion-inline\" *ngFor=\"let op of _util.optBoolean, let idx = index\" >\r\n                                        <input id=\"chkAtivo\" type=\"radio\" [(ngModel)]=\"colaborador.ativo\" name=\"rdaAtivo\" id=\"rdAtivo\" [checked]=\"op.value === colaborador.ativo\" [value]=\"op.value\" #ativo=\"ngModel\"> {{ op.name }} &nbsp;\r\n                                    </label>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                        <div class=\"col-lg-6\">\r\n                            <div class=\"form-group\">\r\n                                <label for=\"sltTipoPerfil\">Perfil:</label>\r\n                                <select id=\"sltTipoPerfil\" name=\"tipoPerfil\" class=\"form-control\"\r\n                                    required [(ngModel)]=\"colaborador.perfilId\" #tipoPerfil=\"ngModel\">\r\n                                    <option *ngFor=\"let op of _util.optTipoPerfil\" value=\"{{ op.value }}\">{{ op.name }}</option>\r\n                                </select>\r\n                                <div *ngIf=\"tipoPerfil.tipoPerfil && (tipoPerfil.dirty || tipoPerfil.touched)\"\r\n                                    class=\"alert alert-danger\">    \r\n                                    <div *ngIf=\"tipoPerfil.errors.required\">* O Perfil é obrigatório.</div>\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label for=\"inpNrCelular\">Celular:</label>\r\n                           \r\n                                <input id=\"inpNrCelular\" name=\"nrCelular\" class=\"form-control\" type=\"text\"\r\n                                    required  minlength=\"10\" maxlength=\"11\"\r\n                                    [(ngModel)]=\"colaborador.nrCelular\"  #nrCelular=\"ngModel\"/>\r\n\r\n                                <div *ngIf=\"nrCelular.invalid && (nrCelular.dirty || nrCelular.touched)\"\r\n                                    class=\"alert alert-danger\">\r\n                                    <div *ngIf=\"nrCelular.errors.required\">* O Nº do celular é obrigatório.</div>\r\n                                    <div *ngIf=\"nrCelular.errors.minlength\">* O Nº do celular deve ter pelo menos 10 algarismos.</div>\r\n                                </div>    \r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"row\">\r\n                        <div class=\"col-lg-6\">\r\n                            <div *ngIf=\"_msg !== ''\" class=\"{{ alertClassType }}\">\r\n                                <div >{{ _msg }}</div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            <div class=\"panel-footer\">\r\n                <div class=\"row\">\r\n                    <div class=\"col-lg-6\">\r\n                        <button type=\"button\" class=\"btn btn-success\" [disabled]=\"!colaboradorForm.form.valid\" (click)=\"gotoReenviarSenha()\">Reenviar Senha</button>\r\n                    </div>\r\n                    <div class=\"col-lg-6 text-right\">\r\n                        <button type=\"submit\" class=\"btn btn-primary\" [disabled]=\"!colaboradorForm.form.valid\">Salvar</button>\r\n                        <button class=\"btn btn-default\" (click)=\"gotoColaboradores()\">Retornar</button>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <!--<app-alert-selfclosing></app-alert-selfclosing>-->\r\n        </div>\r\n    </form>\r\n</div>\r\n</div>\r\n\r\n"
 
 /***/ }),
 
@@ -4947,11 +4955,17 @@ var ColaboradorFormComponent = (function () {
         this._colabId = 0;
         this._msgRetorno = '';
         this._isEMailValid = false;
+        this.alertClassType = 'alert alert-info';
+        this._msgProgresso = '';
     }
     ColaboradorFormComponent.prototype.getColaboradorById = function (id) {
         var _this = this;
+        this._msgProgresso = '...Carregando os dados. Por favor, aguarde!...';
         this.service.getById(id)
-            .subscribe(function (colaborador) { return _this.colaborador = colaborador; });
+            .subscribe(function (colaborador) {
+            _this.colaborador = colaborador;
+            _this._msgProgresso = '';
+        });
     };
     ColaboradorFormComponent.prototype.setColaborador = function () {
         var _this = this;
@@ -4968,6 +4982,8 @@ var ColaboradorFormComponent = (function () {
     };
     ColaboradorFormComponent.prototype.save = function () {
         var _this = this;
+        this.alertClassType = 'alert alert-info';
+        this._msg = 'Salvando os dados. Por favor, aguarde...';
         this.service.addColaborador(this.colaborador)
             .subscribe(function (msg) {
             _this._msgRetorno = msg;
@@ -4986,10 +5002,12 @@ var ColaboradorFormComponent = (function () {
             this._colabId = parseInt(msgRet.substring(0, 10), 10);
             this.router.navigate(["admin/Colaborador/" + this._colabId]);
             this.getColaboradorById(this._colabId);
+            this.alertClassType = 'alert alert-success';
             this._msg = this._msgRetorno.substring(10);
             this.badge = 'Edição';
         }
         else {
+            this.alertClassType = 'alert alert-success';
             this._msg = this._msgRetorno;
         }
     };
@@ -5001,13 +5019,25 @@ var ColaboradorFormComponent = (function () {
     };
     ColaboradorFormComponent.prototype.gotoReenviarSenha = function () {
         var _this = this;
-        this._msg = '';
+        this.alertClassType = 'alert alert-info';
+        this._msg = 'Enviando a senha para o e-mail do associado. Por favor, aguarde...';
         if (this._id !== 0) {
             this.service.ressetPassWordById(this._id)
-                .subscribe(function (msg) { return _this._msg = msg; });
+                .subscribe(function (msg) {
+                _this._msg = msg;
+                _this.gotoAvaliaRetornoEMail(_this._msg);
+            });
         }
         else {
             this._msg = 'Atenção: Você precisa primeiro incluir o registro';
+        }
+    };
+    ColaboradorFormComponent.prototype.gotoAvaliaRetornoEMail = function (msg) {
+        if (msg.substring(0, 7) === 'ATENÇÃO') {
+            this.alertClassType = 'alert alert-danger';
+        }
+        else {
+            this.alertClassType = 'alert alert-success';
         }
     };
     ColaboradorFormComponent.prototype.gotoColaboradores = function () {
@@ -7583,6 +7613,7 @@ var LoginComponent = (function () {
         this._msgDng = '';
         this.editeMail = '';
         this.editPassword = '';
+        this._msgPWD = '';
     }
     LoginComponent.prototype.setMessage = function () {
         this.message = 'Logged ' + (this.authService.isLoggedIn ? 'in' : 'out');
@@ -7630,10 +7661,23 @@ var LoginComponent = (function () {
             this.editeMail = this.editeMail.trim();
             this.editeMail = this.editeMail.toLowerCase();
             this.userProfileService.ressetPassWordByEMail(this.editeMail)
-                .subscribe(function (msg) { return _this._msg = msg; });
+                .subscribe(function (msg) {
+                _this._msgPWD = msg;
+                _this.gotoAvaliaRetornoEMail(_this._msgPWD);
+            });
         }
         else {
             this._msgDng = 'Por favor, informe o seu E-Mail.';
+        }
+    };
+    LoginComponent.prototype.gotoAvaliaRetornoEMail = function (msg) {
+        if (msg.substring(0, 7) === 'ATENÇÃO') {
+            // this.alertClassType = 'alert alert-danger';
+            this._msgDng = msg;
+        }
+        else {
+            // this.alertClassType = 'alert alert-success';
+            this._msg = msg;
         }
     };
     LoginComponent.prototype.onSubmit = function () {
